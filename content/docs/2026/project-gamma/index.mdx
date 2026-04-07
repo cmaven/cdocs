@@ -1,0 +1,27 @@
+---
+title: Project Gamma 개요
+description: 실시간 데이터 파이프라인 프로젝트
+---
+
+# Project Gamma — 실시간 데이터 파이프라인
+
+## 프로젝트 목표
+
+배치 처리 기반 데이터 파이프라인을 실시간 스트리밍으로 전환하여
+데이터 지연(latency)을 24시간에서 5분 이내로 단축합니다.
+
+## 기술 스택
+
+| 구성요소 | 기술 |
+|----------|------|
+| 메시지 브로커 | Apache Kafka 3.7 |
+| 스트림 처리 | Apache Flink 1.19 |
+| 저장소 | Apache Iceberg + S3 |
+| 오케스트레이션 | Kubernetes + Argo Workflows |
+| 모니터링 | Datadog |
+
+## 예상 효과
+
+- 데이터 지연: 24시간에서 5분 이내로 단축
+- 처리량: 100K events/sec
+- 비용 절감: 배치 인프라 대비 30% 절약

@@ -1,0 +1,40 @@
+---
+title: 아키텍처
+description: Project Gamma 데이터 파이프라인 아키텍처
+---
+
+# 데이터 파이프라인 아키텍처
+
+## 전체 데이터 흐름
+
+```mermaid
+graph LR
+    MySQL[(MySQL)] -->|CDC| Kafka[Apache Kafka]
+    PostgreSQL[(PostgreSQL)] -->|CDC| Kafka
+    API[External APIs] -->|CDC| Kafka
+    Kafka -->|consume| Flink[Apache Flink]
+    Flink -->|transform| Iceberg[Apache Iceberg]
+    Iceberg -->|store| S3[(S3)]
+    Iceberg -->|query| Trino[Trino]
+    Trino -->|visualize| Dashboard[Grafana Dashboard]
+```
+
+## Kafka 토픽 설계
+
+```mermaid
+graph TD
+    T1[raw.mysql.users] --> T4[processed.user-activity]
+    T2[raw.mysql.orders] --> T5[processed.order-summary]
+    T3[raw.api.events] --> T4
+    T4 --> T6[sink.iceberg.analytics]
+    T5 --> T6
+    T4 --> T7[sink.alerts]
+```
+
+## 장애 복구 전략
+
+| 장애 유형 | 탐지 | 복구 방법 | RTO |
+|-----------|------|-----------|-----|
+| Kafka 브로커 장애 | ISR 감소 알림 | 자동 리밸런싱 | 2min 이내 |
+| Flink Job 실패 | Checkpoint 실패 | 마지막 Checkpoint 복구 | 5min 이내 |
+| S3 접근 불가 | Write 실패 알림 | Kafka 버퍼링 후 재시도 | 10min 이내 |

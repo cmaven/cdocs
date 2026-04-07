@@ -1,0 +1,68 @@
+---
+title: 트러블슈팅
+description: Project Gamma 자주 발생하는 문제와 해결 방법
+---
+
+# 트러블슈팅
+
+## Kafka Consumer Lag 증가
+
+### 증상
+Consumer group의 lag이 지속적으로 증가하며, 데이터 지연이 발생합니다.
+
+### 원인
+- 파티션 수 대비 consumer 인스턴스 부족
+- 메시지 처리 시간 증가 (downstream 병목)
+
+### 해결
+
+```bash
+# Consumer lag 확인
+kafka-consumer-groups.sh --bootstrap-server kafka:9092 \
+  --group flink-processor --describe
+
+# 파티션 수 조정
+kafka-topics.sh --bootstrap-server kafka:9092 \
+  --topic raw.mysql.orders --alter --partitions 12
+```
+
+## Flink Checkpoint 실패
+
+### 증상
+Checkpoint timeout으로 job이 재시작됩니다.
+
+### 원인
+- State 크기 증가로 Checkpoint 시간 초과
+- S3 네트워크 지연
+
+### 해결
+
+```yaml
+# flink-conf.yaml
+state.backend: rocksdb
+state.backend.incremental: true
+execution.checkpointing.interval: 60000
+execution.checkpointing.timeout: 600000
+```
+
+## Iceberg 쿼리 성능 저하
+
+### 증상
+Trino에서 Iceberg 테이블 쿼리 응답 시간이 증가합니다.
+
+### 원인
+- Small files 문제 (파일이 너무 많고 작음)
+- 파티션 필터 누락
+
+### 해결
+
+```sql
+-- Compaction 실행
+ALTER TABLE analytics.events EXECUTE optimize
+  WHERE event_date >= DATE '2026-01-01';
+
+-- 파티션 기반 쿼리 사용
+SELECT * FROM analytics.events
+WHERE event_date = DATE '2026-04-07'
+  AND event_type = 'purchase';
+```

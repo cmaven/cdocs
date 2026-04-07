@@ -1,0 +1,53 @@
+---
+title: 아키텍처
+description: Project Alpha 시스템 아키텍처 설계
+---
+
+# 시스템 아키텍처
+
+## 전체 구성도
+
+```mermaid
+graph TB
+    Developer[개발자] -->|git push| GitHub[GitHub Repository]
+    GitHub -->|webhook| Actions[GitHub Actions]
+    Actions -->|terraform apply| AWS[AWS Cloud]
+    AWS --> EKS[EKS Cluster]
+    AWS --> RDS[RDS PostgreSQL]
+    AWS --> S3[S3 Bucket]
+    Actions -->|deploy| EKS
+    EKS -->|metrics| Prometheus[Prometheus]
+    Prometheus -->|dashboard| Grafana[Grafana]
+```
+
+## 배포 흐름
+
+```mermaid
+sequenceDiagram
+    participant Dev as 개발자
+    participant GH as GitHub
+    participant CI as CI/CD
+    participant K8s as Kubernetes
+    participant Mon as Monitoring
+    Dev->>GH: Pull Request
+    GH->>CI: Trigger Pipeline
+    CI->>CI: Lint + Test
+    CI->>CI: Docker Build
+    CI->>K8s: Rolling Deploy
+    K8s->>Mon: Health Check
+    Mon-->>Dev: Slack 알림
+```
+
+## 네트워크 구성
+
+| 서브넷 | CIDR | 용도 |
+|--------|------|------|
+| Public | 10.0.1.0/24 | ALB, NAT Gateway |
+| Private-App | 10.0.2.0/24 | EKS 워커 노드 |
+| Private-DB | 10.0.3.0/24 | RDS 인스턴스 |
+
+## 보안 정책
+
+- 모든 통신 TLS 1.3 암호화
+- IAM Role 기반 최소 권한 원칙 적용
+- 시크릿은 AWS Secrets Manager 관리

@@ -1,0 +1,28 @@
+{
+  "name": "docs-portal",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0 --port 3030",
+    "build": "next build",
+    "start": "next start --hostname 0.0.0.0 --port 3030",
+    "postinstall": "fumadocs-mdx"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "@types/node": "^25.5.2",
+    "@types/react": "^19.2.14",
+    "autoprefixer": "^10.4.27",
+    "fumadocs-core": "^16.7.10",
+    "fumadocs-mdx": "^14.2.11",
+    "fumadocs-ui": "^16.7.10",
+    "mermaid": "^11.14.0",
+    "next": "^16.2.1-canary.24",
+    "next-themes": "^0.4.6",
+    "postcss": "^8.5.8",
+    "react": "^19.3.0-canary-1b45e243-20260402",
+    "react-dom": "^19.3.0-canary-1b45e243-20260402",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^6.0.2"
+  }
+}

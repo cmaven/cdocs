@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+@import 'tailwindcss';
+@import 'fumadocs-ui/style.css';
+@import 'fumadocs-ui/css/neutral.css';
+
+:root {
+  --font-sans: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --fd-font-sans: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --color-fd-background: 255 255 255;
+  --color-fd-foreground: 23 23 23;
+  --color-fd-muted: 245 245 244;
+  --color-fd-muted-foreground: 115 115 115;
+  --color-fd-card: 255 255 255;
+  --color-fd-border: 229 229 229;
+  --color-fd-primary: 99 102 241;
+  --color-fd-primary-foreground: 255 255 255;
+  --color-fd-accent: 243 244 246;
+  --color-fd-accent-foreground: 23 23 23;
+}
+
+.dark {
+  --color-fd-background: 18 18 18;
+  --color-fd-foreground: 229 229 229;
+  --color-fd-muted: 30 30 30;
+  --color-fd-muted-foreground: 163 163 163;
+  --color-fd-card: 24 24 24;
+  --color-fd-border: 45 45 45;
+  --color-fd-primary: 129 140 248;
+  --color-fd-primary-foreground: 18 18 18;
+  --color-fd-accent: 30 30 30;
+  --color-fd-accent-foreground: 229 229 229;
+}
+
+/* Mermaid diagram container */
+.mermaid-wrapper svg {
+  max-width: 100%;
+  height: auto;
+}
