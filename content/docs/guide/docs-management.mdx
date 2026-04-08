@@ -266,15 +266,40 @@ MDX에서 사용:
 
 ## 빌드 및 배포
 
+### 로컬 실행
+
 ```bash
-# 개발 모드 (Hot Reload)
+# 개발 모드 (Hot Reload — 파일 수정 즉시 반영)
 npm run dev
+```
 
-# 프로덕션 빌드
-npm run build && npm run start
+### Docker 실행 (권장)
 
-# Docker 배포
+```bash
+# 시작 (볼륨 마운트 + 개발 모드)
 docker compose up -d
+```
+
+Docker는 프로젝트 디렉토리를 볼륨 마운트하여 실행합니다.
+`.mdx` 파일을 추가/수정하면 **재시작 없이 즉시 반영**됩니다 (Hot Reload).
+
+```bash
+# 문서 추가 후 auto-meta 실행 (Docker 내부)
+docker compose exec docs-portal npm run auto-meta
+
+# 로그 확인
+docker compose logs -f
+
+# 중지
+docker compose down
+```
+
+### 프로덕션 빌드 (선택)
+
+정적 파일로 배포하려면:
+
+```bash
+npm run build && npm run start
 ```
 
 ---
