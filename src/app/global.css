@@ -68,10 +68,10 @@ pre, code, kbd, samp, .prose code, [data-rehype-pretty-code-figure] code {
   color: var(--color-fd-muted-foreground);
 }
 
-/* ── 레이아웃: 왼쪽 공백 최소화, 오른쪽으로 여유 ── */
+/* ── 레이아웃: 콘텐츠 영역 overflow 방지, TOC 항상 표시 ── */
 @media (min-width: 1280px) {
   #nd-docs-layout {
-    grid-template-columns: 0px 260px 1fr 260px 0px !important;
+    grid-template-columns: 0px 260px minmax(0, 1fr) 260px 0px !important;
   }
   #nd-sidebar {
     max-width: 260px;
@@ -83,10 +83,19 @@ pre, code, kbd, samp, .prose code, [data-rehype-pretty-code-figure] code {
   }
   #nd-page {
     max-width: none !important;
+    min-width: 0;
     margin-left: 0 !important;
     margin-right: 0 !important;
     padding-left: 2rem;
     padding-right: 2rem;
+    overflow-x: hidden;
+  }
+}
+/* 1024~1279px 에서도 TOC 표시 */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  #nd-page {
+    min-width: 0;
+    overflow-x: hidden;
   }
 }
 
@@ -109,9 +118,11 @@ pre, code, kbd, samp, .prose code, [data-rehype-pretty-code-figure] code {
   border-collapse: separate;
   border-spacing: 0;
   width: 100%;
-  overflow: hidden;
+  overflow-x: auto;
   border-radius: 8px;
   border: 1px solid var(--color-fd-border);
+  display: block;
+  max-width: 100%;
 }
 .prose thead {
   background: linear-gradient(135deg, var(--color-fd-primary), color-mix(in oklch, var(--color-fd-primary) 80%, black));
@@ -187,13 +198,34 @@ figure.shiki {
   gap: 0.5rem;
 }
 
-/* ── 문서 내 이미지 크기 제한 ── */
+/* ── 문서 본문: overflow 방지 ── */
+.prose {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+/* 코드블록 가로 스크롤 */
+.prose pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+/* 테이블 가로 스크롤 래퍼 */
+.prose .table-wrapper,
+.prose > table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* ── 문서 내 이미지 반응형 ── */
 .prose img {
   max-width: 100%;
+  width: auto;
   height: auto;
   border-radius: 8px;
   border: 1px solid var(--color-fd-border);
   margin: 1rem 0;
+  object-fit: contain;
 }
 
 /* Mermaid diagram container */
