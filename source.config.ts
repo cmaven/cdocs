@@ -1,7 +1,12 @@
 import { defineConfig, defineDocs } from 'fumadocs-mdx/config';
+import { remarkAlert } from 'remark-github-blockquote-alert';
 
 export const docs = defineDocs({
   dir: 'content/docs',
 });
 
-export default defineConfig({});
+export default defineConfig({
+  mdxOptions: {
+    remarkPlugins: [remarkAlert],
+  },
+});

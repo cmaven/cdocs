@@ -1,0 +1,226 @@
+---
+title: 커스터마이즈 가이드
+description: 테마, 색상, 폰트, 레이아웃 등 포털 외관 커스터마이징 방법
+---
+
+# 커스터마이즈 가이드
+
+Tech Docs Portal의 테마, 색상, 폰트, 레이아웃을 변경하는 방법을 안내합니다.
+
+## 테마 색상 변경
+
+포털의 색상은 `src/app/global.css`의 CSS 변수로 제어됩니다.
+
+### Light 모드 색상
+
+```css
+:root {
+  --color-fd-background: #f3f6f6;       /* 페이지 배경 */
+  --color-fd-foreground: #40514e;       /* 기본 텍스트 */
+  --color-fd-muted: #e8eded;            /* 비활성 배경 */
+  --color-fd-muted-foreground: #6b7a77; /* 비활성 텍스트 */
+  --color-fd-card: #ffffff;             /* 카드/코드블록 배경 */
+  --color-fd-border: rgba(207, 212, 211, 0.6); /* 테두리 */
+  --color-fd-primary: #11999e;          /* 주요 색상 (링크, 버튼) */
+  --color-fd-primary-foreground: #ffffff; /* 주요 색상 위 텍스트 */
+  --color-fd-ring: #11999e;             /* 포커스 링 */
+}
+```
+
+### Dark 모드 색상
+
+```css
+.dark {
+  --color-fd-background: #1a1f1e;
+  --color-fd-foreground: #d0d5d3;
+  --color-fd-primary: #30e3ca;          /* 다크모드 주요 색상 */
+  --color-fd-primary-foreground: #1a1f1e;
+  --color-fd-card: #222827;
+}
+```
+
+### 색상 변경 예시
+
+주요 색상을 파란색으로 변경하려면:
+
+```css
+:root {
+  --color-fd-primary: #3b82f6;          /* 파란색 */
+  --color-fd-ring: #3b82f6;
+}
+.dark {
+  --color-fd-primary: #60a5fa;          /* 다크모드 밝은 파란색 */
+}
+```
+
+> 변경 후 개발 서버에서 바로 확인할 수 있습니다 (Hot Reload).
+
+---
+
+## 폰트 변경
+
+현재 사용 중인 폰트:
+
+| 용도 | 폰트 | 설정 위치 |
+|------|------|-----------|
+| 본문 (sans-serif) | SUITE Variable | `global.css` `--font-sans` |
+| 코드 (monospace) | D2Coding Ligature | `global.css` `--font-mono` |
+
+### 폰트 변경 방법
+
+`src/app/global.css` 상단의 `@import`와 `:root` 변수를 수정합니다:
+
+```css
+/* 1. 폰트 import 변경 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+/* 2. 변수 변경 */
+:root {
+  --font-sans: 'Noto Sans KR', sans-serif;
+  --fd-font-sans: 'Noto Sans KR', sans-serif;
+}
+```
+
+> `--font-sans`와 `--fd-font-sans` 두 변수를 모두 변경해야 합니다.
+
+---
+
+## 레이아웃 조정
+
+### 사이드바 너비
+
+`global.css`의 `@media (min-width: 1280px)` 섹션에서 조정:
+
+```css
+@media (min-width: 1280px) {
+  #nd-docs-layout {
+    /* 순서: 여백 | 사이드바 | 콘텐츠 | TOC | 여백 */
+    grid-template-columns: 0px 260px 1fr 260px 0px !important;
+  }
+  #nd-sidebar { max-width: 260px; }  /* 사이드바 너비 */
+  #nd-toc { max-width: 260px; }      /* 우측 TOC 너비 */
+}
+```
+
+### 콘텐츠 영역 패딩
+
+```css
+#nd-page {
+  padding-left: 2rem;   /* 콘텐츠 좌측 여백 */
+  padding-right: 2rem;  /* 콘텐츠 우측 여백 */
+}
+```
+
+---
+
+## 제목 스타일
+
+H1, H2 제목 하단에 구분선이 표시됩니다. 스타일 변경:
+
+```css
+/* 구분선 제거 */
+.prose h1, .prose h2 {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* 구분선 색상 변경 */
+.prose h1, .prose h2 {
+  border-bottom: 2px solid var(--color-fd-primary);
+}
+```
+
+---
+
+## 테이블 스타일
+
+테이블 헤더의 그라데이션 색상 변경:
+
+```css
+.prose thead {
+  background: linear-gradient(
+    135deg,
+    var(--color-fd-primary),
+    color-mix(in oklch, var(--color-fd-primary) 80%, black)
+  );
+}
+```
+
+---
+
+## 코드블록 스타일
+
+Syntax highlighting 색상은 Shiki 테마 변수로 제어됩니다:
+
+```css
+/* Light 모드 */
+:root {
+  --shiki-light: #40514e;        /* 코드 텍스트 색상 */
+  --shiki-light-bg: #f8fafa;     /* 코드 배경 색상 */
+}
+
+/* Dark 모드 */
+.dark {
+  --shiki-dark: #d0d5d3;
+  --shiki-dark-bg: #1e2826;
+}
+```
+
+---
+
+## 개발 모드 설정
+
+### Dev Indicator (개발 인디케이터)
+
+Next.js 개발 모드에서 좌하단에 표시되는 "N" 버튼을 켜고 끌 수 있습니다.
+
+**파일**: `next.config.mjs`
+
+```js
+const config = {
+  // 개발 인디케이터 끄기
+  devIndicators: false,
+
+  // 개발 인디케이터 켜기 (기본값)
+  // devIndicators: true,
+};
+```
+
+### 허용 개발 Origin
+
+외부 IP로 개발 서버에 접근하려면 `allowedDevOrigins`에 IP를 추가합니다:
+
+```js
+const config = {
+  allowedDevOrigins: [
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0',
+    '10.254.175.93',  // 서버 IP 추가
+  ],
+};
+```
+
+---
+
+## 사이드바 프로젝트 스타일
+
+특정 프로젝트 제목을 굵게 표시하려면:
+
+```css
+#nd-sidebar a[href$="/project-name"] {
+  font-weight: 700;
+}
+```
+
+---
+
+## 커스터마이즈 파일 요약
+
+| 파일 | 역할 |
+|------|------|
+| `src/app/global.css` | 색상, 폰트, 레이아웃, 테이블, 코드블록 스타일 |
+| `next.config.mjs` | 개발 인디케이터, 허용 Origin |
+| `src/app/layout.config.tsx` | 네비게이션, GitHub URL, 사이트 제목 |
+| `src/app/docs/layout.tsx` | 사이드바 구조, 연도 탭, 버전 선택기 |
+| `src/app/layout.tsx` | 루트 레이아웃, 다크모드 기본값 |

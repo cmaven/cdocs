@@ -1,4 +1,4 @@
 {
   "title": "Guide",
-  "pages": ["index", "mdx-writing", "docs-management"]
+  "pages": ["index", "mdx-writing", "components", "customization", "docs-management"]
 }

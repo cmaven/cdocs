@@ -177,3 +177,160 @@ figure.shiki {
   max-width: 100%;
   height: auto;
 }
+
+/* ── MDX Button 컴포넌트 ── */
+a.mdx-button {
+  display: inline-block;
+  font-size: 0.875rem;
+  line-height: 2rem;
+  padding: 0 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  font-weight: 500;
+}
+a.mdx-button--outline {
+  color: var(--color-fd-primary);
+  border: 1px solid var(--color-fd-primary);
+  background: transparent;
+}
+a.mdx-button--outline:hover {
+  background: var(--color-fd-accent);
+  text-decoration: none;
+}
+a.mdx-button--solid {
+  color: var(--color-fd-primary-foreground);
+  background: var(--color-fd-primary);
+  border: 1px solid var(--color-fd-primary);
+}
+a.mdx-button--solid:hover {
+  opacity: 0.9;
+  text-decoration: none;
+}
+
+/* ── MDX Columns 컴포넌트 ── */
+.mdx-columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+.mdx-column {
+  flex: 1 1 0%;
+  min-width: 200px;
+}
+@media (max-width: 768px) {
+  .mdx-columns {
+    flex-direction: column;
+  }
+  .mdx-column {
+    min-width: 100%;
+  }
+}
+
+/* ── MDX Asciinema 컴포넌트 ── */
+.mdx-asciinema {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--color-fd-border);
+}
+
+/* ── Callout/Hint 배경색 ── */
+.prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-info"] {
+  background-color: rgba(59, 130, 246, 0.08);
+}
+.prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-warning"] {
+  background-color: rgba(245, 158, 11, 0.08);
+}
+.prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-error"] {
+  background-color: rgba(239, 68, 68, 0.08);
+}
+.prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-success"] {
+  background-color: rgba(16, 185, 129, 0.08);
+}
+.dark .prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-info"] {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+.dark .prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-warning"] {
+  background-color: rgba(245, 158, 11, 0.15);
+}
+.dark .prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-error"] {
+  background-color: rgba(239, 68, 68, 0.15);
+}
+.dark .prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-success"] {
+  background-color: rgba(16, 185, 129, 0.15);
+}
+
+/* ── GFM Alert (remark-github-blockquote-alert) 스타일 ── */
+.markdown-alert {
+  border-left: 4px solid var(--color-fd-primary);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+}
+.markdown-alert-note {
+  border-left-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.08);
+}
+.markdown-alert-warning {
+  border-left-color: #f59e0b;
+  background-color: rgba(245, 158, 11, 0.08);
+}
+.markdown-alert-tip {
+  border-left-color: #10b981;
+  background-color: rgba(16, 185, 129, 0.08);
+}
+.markdown-alert-important {
+  border-left-color: #8b5cf6;
+  background-color: rgba(139, 92, 246, 0.08);
+}
+.markdown-alert-caution {
+  border-left-color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.08);
+}
+.dark .markdown-alert-note { background-color: rgba(59, 130, 246, 0.15); }
+.dark .markdown-alert-warning { background-color: rgba(245, 158, 11, 0.15); }
+.dark .markdown-alert-tip { background-color: rgba(16, 185, 129, 0.15); }
+.dark .markdown-alert-important { background-color: rgba(139, 92, 246, 0.15); }
+.dark .markdown-alert-caution { background-color: rgba(239, 68, 68, 0.15); }
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+/* ── 사이드바 하단: 아이콘 + version + theme toggle 정렬 ── */
+#nd-sidebar .flex.flex-col.p-4.pt-2 {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding-bottom: 2.5rem !important;
+}
+#nd-sidebar .flex.flex-col.p-4.pt-2 > * {
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+}
+#nd-sidebar .relative.inline-flex button {
+  height: 32px;
+}
+
+/* ── Next.js 개발 인디케이터 위치 조정 (좌하단 겹침 방지) ── */
+nextjs-portal {
+  display: block;
+}
+body > nextjs-portal [data-nextjs-dialog-overlay],
+body > nextjs-portal {
+  --nextjs-portal-offset: 48px;
+}
+/* Next.js dev indicator 를 오른쪽 하단으로 이동 */
+@media (min-width: 768px) {
+  body > nextjs-portal > div:first-child,
+  body > nextjs-portal > [data-nextjs-toast] {
+    left: auto !important;
+    right: 16px !important;
+    bottom: 16px !important;
+  }
+}

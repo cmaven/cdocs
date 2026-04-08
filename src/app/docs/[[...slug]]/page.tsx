@@ -8,6 +8,15 @@ import {
 import { notFound } from 'next/navigation';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import { Mermaid } from '@/components/mdx/mermaid';
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+import { Accordions, Accordion } from 'fumadocs-ui/components/accordion';
+import { Badge } from '@/components/mdx/badge';
+import { Button } from '@/components/mdx/button';
+import { Columns, Column } from '@/components/mdx/columns';
+import { Asciinema } from '@/components/mdx/asciinema';
+import { Details } from '@/components/mdx/details';
 import type { ReactElement } from 'react';
 
 const MERMAID_KEYWORDS = ['graph ', 'graph\n', 'flowchart ', 'sequenceDiagram', 'classDiagram', 'stateDiagram', 'erDiagram', 'gantt', 'pie ', 'gitGraph', 'journey', 'mindmap', 'timeline', 'quadrantChart', 'xychart', 'block-beta', 'sankey'];
@@ -56,7 +65,22 @@ export default async function Page(props: {
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
-        <MDX components={{ ...defaultMdxComponents, Mermaid, pre: MdxPre }} />
+        <MDX components={{
+          ...defaultMdxComponents,
+          pre: MdxPre,
+          Mermaid,
+          // Fumadocs 내장 컴포넌트
+          Tabs, Tab,
+          Callout,
+          Steps, Step,
+          Accordions, Accordion,
+          // 커스텀 컴포넌트
+          Badge, Button, Columns, Column,
+          Asciinema,
+          // Hugo 스타일 별칭 (간편 문법)
+          Hint: Callout,
+          Details,
+        }} />
       </DocsBody>
     </DocsPage>
   );

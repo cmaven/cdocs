@@ -1,0 +1,424 @@
+---
+title: 컴포넌트 가이드
+description: MDX 문서에서 사용할 수 있는 UI 컴포넌트 모음
+---
+
+# 컴포넌트 가이드
+
+Tech Docs Portal은 다양한 UI 컴포넌트를 **import 없이** MDX 파일에서 바로 사용할 수 있습니다.
+Hugo Book 테마의 숏코드를 참고하여 구현되었으며, Fumadocs 내장 컴포넌트와 커스텀 컴포넌트로 구성됩니다.
+
+---
+
+## Callout / Hint (알림 박스)
+
+중요한 정보, 경고, 팁 등을 강조할 때 사용합니다.
+
+### 기본 사용법
+
+```mdx
+<Callout type="info" title="참고">
+  이것은 정보 알림입니다.
+</Callout>
+```
+
+<Callout type="info" title="참고">
+  이것은 정보 알림입니다.
+</Callout>
+
+### 타입별 예제
+
+```mdx
+<Callout type="info" title="정보">유용한 정보를 전달합니다.</Callout>
+<Callout type="warn" title="주의">주의가 필요한 사항입니다.</Callout>
+<Callout type="error" title="오류">오류 또는 위험한 상황입니다.</Callout>
+<Callout type="success" title="성공">성공적으로 완료되었습니다.</Callout>
+```
+
+<Callout type="info" title="정보">유용한 정보를 전달합니다.</Callout>
+
+<Callout type="warn" title="주의">주의가 필요한 사항입니다.</Callout>
+
+<Callout type="error" title="오류">오류 또는 위험한 상황입니다.</Callout>
+
+<Callout type="success" title="성공">성공적으로 완료되었습니다.</Callout>
+
+### 별칭: Hint
+
+Hugo Book의 `hint` 숏코드에 익숙하다면 `Hint`를 사용할 수도 있습니다. `Hint`는 `Callout`의 별칭입니다.
+
+```mdx
+<Hint type="warn" title="경고">
+  이것은 Hint 별칭으로 작성한 경고입니다.
+</Hint>
+```
+
+<Hint type="warn" title="경고">
+  이것은 Hint 별칭으로 작성한 경고입니다.
+</Hint>
+
+### GFM Alert (마크다운 네이티브)
+
+가장 간편한 방법으로, 표준 마크다운 문법만으로 알림을 작성할 수 있습니다.
+
+```md
+> [!NOTE]
+> 참고할 정보입니다.
+
+> [!WARNING]
+> 주의가 필요합니다.
+
+> [!TIP]
+> 유용한 팁입니다.
+```
+
+> [!NOTE]
+> 참고할 정보입니다.
+
+> [!WARNING]
+> 주의가 필요합니다.
+
+> [!TIP]
+> 유용한 팁입니다.
+
+| 방법 | 문법 | 추천 상황 |
+|------|------|-----------|
+| GFM Alert | `> [!NOTE]` | 간단한 알림, 마크다운만 사용 |
+| Callout | `<Callout type="info">` | title 지정, 커스텀 아이콘 필요 |
+| Hint | `<Hint type="info">` | Hugo 숏코드 스타일 선호 |
+
+---
+
+## Tabs (탭)
+
+여러 내용을 탭으로 구분하여 보여줄 때 사용합니다.
+
+### 간편 모드 (items)
+
+````mdx
+<Tabs items={["MacOS", "Linux", "Windows"]}>
+  <Tab value="MacOS">
+    `brew install hugo`
+  </Tab>
+  <Tab value="Linux">
+    `sudo apt install hugo`
+  </Tab>
+  <Tab value="Windows">
+    `choco install hugo`
+  </Tab>
+</Tabs>
+````
+
+<Tabs items={["MacOS", "Linux", "Windows"]}>
+  <Tab value="MacOS">
+    MacOS에서는 Homebrew로 설치합니다: `brew install hugo`
+  </Tab>
+  <Tab value="Linux">
+    Linux에서는 apt로 설치합니다: `sudo apt install hugo`
+  </Tab>
+  <Tab value="Windows">
+    Windows에서는 Chocolatey로 설치합니다: `choco install hugo`
+  </Tab>
+</Tabs>
+
+### Props
+
+| Prop | 타입 | 설명 |
+|------|------|------|
+| `items` | `string[]` | 탭 라벨 배열 |
+| `defaultIndex` | `number` | 기본 선택 탭 (기본: 0) |
+
+---
+
+## Steps (단계)
+
+순서가 있는 작업 단계를 표시할 때 사용합니다.
+
+### 사용법
+
+```mdx
+<Steps>
+  <Step>
+    ### 프로젝트 생성
+
+    `npx create-next-app`으로 새 프로젝트를 생성합니다.
+  </Step>
+  <Step>
+    ### 의존성 설치
+
+    `npm install fumadocs-ui fumadocs-core`를 실행합니다.
+  </Step>
+  <Step>
+    ### 콘텐츠 작성
+
+    `content/docs/` 디렉토리에 MDX 파일을 추가합니다.
+  </Step>
+</Steps>
+```
+
+<Steps>
+  <Step>
+    ### 프로젝트 생성
+
+    `npx create-next-app`으로 새 프로젝트를 생성합니다.
+  </Step>
+  <Step>
+    ### 의존성 설치
+
+    `npm install fumadocs-ui fumadocs-core`를 실행합니다.
+  </Step>
+  <Step>
+    ### 콘텐츠 작성
+
+    `content/docs/` 디렉토리에 MDX 파일을 추가합니다.
+  </Step>
+</Steps>
+
+---
+
+## Accordion / Details (접기/펼치기)
+
+길거나 선택적인 내용을 접어서 보여줄 때 사용합니다.
+
+### 단일 사용
+
+```mdx
+<Accordions>
+  <Accordion title="자주 묻는 질문 1">
+    답변 내용이 여기에 들어갑니다.
+    **마크다운**도 사용할 수 있습니다.
+  </Accordion>
+  <Accordion title="자주 묻는 질문 2">
+    두 번째 답변입니다.
+  </Accordion>
+</Accordions>
+```
+
+<Accordions>
+  <Accordion title="자주 묻는 질문 1">
+    답변 내용이 여기에 들어갑니다.
+    **마크다운**도 사용할 수 있습니다.
+  </Accordion>
+  <Accordion title="자주 묻는 질문 2">
+    두 번째 답변입니다.
+  </Accordion>
+</Accordions>
+
+### 별칭: Details
+
+Hugo Book의 `details` 숏코드에 익숙하다면 `Details`를 사용할 수 있습니다. `Accordions` 래퍼 없이 **단독으로** 사용할 수 있습니다.
+
+```mdx
+<Details title="펼쳐서 보기">
+  숨겨진 내용입니다.
+</Details>
+```
+
+<Details title="펼쳐서 보기">
+  숨겨진 내용입니다.
+</Details>
+
+---
+
+## Badge (뱃지)
+
+상태, 버전, 레이블 등을 인라인으로 표시할 때 사용합니다.
+
+### 사용법
+
+```mdx
+<Badge style="info" title="Version" value="2.0.0" />
+<Badge style="success" title="Build" value="Passing" />
+<Badge style="warning" title="Coverage" value="75%" />
+<Badge style="danger" title="Issues" value="3" />
+```
+
+<Badge style="info" title="Version" value="2.0.0" /> <Badge style="success" title="Build" value="Passing" /> <Badge style="warning" title="Coverage" value="75%" /> <Badge style="danger" title="Issues" value="3" />
+
+### 전체 스타일
+
+```mdx
+<Badge style="default" title="Default" value="값" />
+<Badge style="info" title="Info" value="값" />
+<Badge style="success" title="Success" value="값" />
+<Badge style="warning" title="Warning" value="값" />
+<Badge style="danger" title="Danger" value="값" />
+<Badge style="note" title="Note" value="값" />
+<Badge style="tip" title="Tip" value="값" />
+<Badge style="important" title="Important" value="값" />
+<Badge style="caution" title="Caution" value="값" />
+```
+
+<Badge style="default" title="Default" value="값" /> <Badge style="info" title="Info" value="값" /> <Badge style="success" title="Success" value="값" /> <Badge style="warning" title="Warning" value="값" /> <Badge style="danger" title="Danger" value="값" /> <Badge style="note" title="Note" value="값" /> <Badge style="tip" title="Tip" value="값" /> <Badge style="important" title="Important" value="값" /> <Badge style="caution" title="Caution" value="값" />
+
+### Props
+
+| Prop | 타입 | 기본값 | 설명 |
+|------|------|--------|------|
+| `style` | `string` | `default` | 색상 스타일 (위 9가지) |
+| `title` | `ReactNode` | - | 왼쪽 라벨 |
+| `value` | `ReactNode` | - | 오른쪽 값 |
+
+---
+
+## Button (버튼)
+
+링크를 버튼 스타일로 표시할 때 사용합니다.
+
+### 사용법
+
+```mdx
+<Button href="/docs">문서 보기</Button>
+<Button href="https://github.com">GitHub</Button>
+<Button href="/docs/2025/guide" variant="solid">시작하기</Button>
+```
+
+<Button href="/docs">문서 보기</Button> <Button href="https://github.com">GitHub</Button> <Button href="/docs/2025/guide" variant="solid">시작하기</Button>
+
+### Props
+
+| Prop | 타입 | 기본값 | 설명 |
+|------|------|--------|------|
+| `href` | `string` | 필수 | 링크 URL |
+| `variant` | `'outline' \| 'solid'` | `outline` | 버튼 스타일 |
+
+> 외부 링크(`https://`)는 자동으로 새 탭에서 열리며 외부 링크 아이콘이 표시됩니다.
+
+---
+
+## Columns (다단 레이아웃)
+
+콘텐츠를 여러 열로 나누어 배치할 때 사용합니다.
+
+### 2단 레이아웃
+
+```mdx
+<Columns>
+  <Column>
+    ### 왼쪽 열
+    첫 번째 열의 내용입니다.
+  </Column>
+  <Column>
+    ### 오른쪽 열
+    두 번째 열의 내용입니다.
+  </Column>
+</Columns>
+```
+
+<Columns>
+  <Column>
+    ### 왼쪽 열
+    첫 번째 열의 내용입니다.
+  </Column>
+  <Column>
+    ### 오른쪽 열
+    두 번째 열의 내용입니다.
+  </Column>
+</Columns>
+
+### 비율 지정 (ratio)
+
+```mdx
+<Columns ratio="1:2">
+  <Column>
+    ### 좁은 열 (1)
+    사이드바 역할
+  </Column>
+  <Column>
+    ### 넓은 열 (2)
+    메인 콘텐츠 영역
+  </Column>
+</Columns>
+```
+
+<Columns ratio="1:2">
+  <Column>
+    ### 좁은 열 (1)
+    사이드바 역할
+  </Column>
+  <Column>
+    ### 넓은 열 (2)
+    메인 콘텐츠 영역
+  </Column>
+</Columns>
+
+### 3단 레이아웃
+
+```mdx
+<Columns>
+  <Column>열 1</Column>
+  <Column>열 2</Column>
+  <Column>열 3</Column>
+</Columns>
+```
+
+<Columns>
+  <Column>열 1</Column>
+  <Column>열 2</Column>
+  <Column>열 3</Column>
+</Columns>
+
+### Props
+
+| Prop | 타입 | 설명 |
+|------|------|------|
+| `ratio` | `string` | 열 비율 (예: `"1:2"`, `"1:1:1"`) |
+
+> 모바일(768px 이하)에서는 자동으로 세로 스택으로 전환됩니다.
+
+---
+
+## Asciinema (터미널 녹화)
+
+터미널 세션 녹화 파일(`.cast`)을 재생할 때 사용합니다.
+
+### 사용법
+
+```mdx
+<Asciinema src="/recordings/demo.cast" />
+```
+
+### 옵션 지정
+
+```mdx
+<Asciinema
+  src="/recordings/demo.cast"
+  rows={24}
+  cols={80}
+  autoPlay
+  loop
+  speed={2}
+/>
+```
+
+### Props
+
+| Prop | 타입 | 기본값 | 설명 |
+|------|------|--------|------|
+| `src` | `string` | 필수 | `.cast` 파일 경로 또는 URL |
+| `rows` | `number` | 자동 | 터미널 행 수 |
+| `cols` | `number` | 자동 | 터미널 열 수 |
+| `autoPlay` | `boolean` | `false` | 자동 재생 |
+| `loop` | `boolean` | `false` | 반복 재생 |
+| `speed` | `number` | `1` | 재생 속도 |
+| `idleTimeLimit` | `number` | - | 유휴 시간 제한 (초) |
+| `fit` | `string` | `width` | 크기 맞춤 (`width`, `height`, `both`, `none`) |
+
+> `.cast` 파일은 `public/recordings/` 디렉토리에 저장하세요.
+
+---
+
+## 컴포넌트 요약표
+
+| 컴포넌트 | 별칭 | 용도 | 출처 |
+|----------|------|------|------|
+| `Callout` | `Hint` | 알림/경고 박스 | Fumadocs 내장 |
+| `Tabs` + `Tab` | - | 탭 UI | Fumadocs 내장 |
+| `Steps` + `Step` | - | 단계별 안내 | Fumadocs 내장 |
+| `Accordions` + `Accordion` | `Details` | 접기/펼치기 | Fumadocs 내장 |
+| `Badge` | - | 상태 뱃지 | 커스텀 |
+| `Button` | - | 링크 버튼 | 커스텀 |
+| `Columns` + `Column` | - | 다단 레이아웃 | 커스텀 |
+| `Asciinema` | - | 터미널 녹화 | 커스텀 |
+
+모든 컴포넌트는 **import 없이** MDX 파일에서 바로 사용할 수 있습니다.
