@@ -1,4 +1,4 @@
-/* global.css: 전역 스타일 - cmaven.github.io mint 테마 기반 | 수정일: 2026-04-07 */
+/* global.css: 전역 스타일 - cmaven.github.io mint 테마 기반 | 수정일: 2026-04-08 */
 @import url('https://cdn.jsdelivr.net/gh/sun-typeface/SUITE/fonts/variable/woff2/SUITE-Variable.css');
 @import url('https://cdn.jsdelivr.net/gh/wan2land/d2coding/d2coding-ligature-full.css');
 @import 'tailwindcss';
@@ -144,6 +144,21 @@ pre, code, kbd, samp, .prose code, [data-rehype-pretty-code-figure] code {
 .prose tbody td:not(:last-child) {
   border-right: 1px solid var(--color-fd-border);
 }
+/* 다크모드 테이블: 헤더 대비 강화 */
+.dark .prose thead {
+  background: linear-gradient(135deg, #1a9e9e, #15b3b3);
+  color: #ffffff;
+}
+.dark .prose thead th {
+  color: #ffffff;
+  font-weight: 700;
+}
+.dark .prose tbody tr {
+  background-color: var(--color-fd-background);
+}
+.dark .prose tbody tr:nth-child(even) {
+  background-color: var(--color-fd-card);
+}
 
 /* Light 모드: 코드블록 syntax highlighting (example_04 참조) */
 :root {
@@ -236,30 +251,12 @@ a.mdx-button--solid:hover {
   border: 1px solid var(--color-fd-border);
 }
 
-/* ── Callout/Hint 배경색 ── */
-.prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-info"] {
-  background-color: rgba(59, 130, 246, 0.08);
+/* ── Callout/Hint 배경색 (--callout-color 변수 활용) ── */
+.prose div.flex.gap-2.my-4.rounded-xl.bg-fd-card[style] {
+  background-color: color-mix(in srgb, var(--callout-color, transparent) 10%, var(--color-fd-card)) !important;
 }
-.prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-warning"] {
-  background-color: rgba(245, 158, 11, 0.08);
-}
-.prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-error"] {
-  background-color: rgba(239, 68, 68, 0.08);
-}
-.prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-success"] {
-  background-color: rgba(16, 185, 129, 0.08);
-}
-.dark .prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-info"] {
-  background-color: rgba(59, 130, 246, 0.15);
-}
-.dark .prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-warning"] {
-  background-color: rgba(245, 158, 11, 0.15);
-}
-.dark .prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-error"] {
-  background-color: rgba(239, 68, 68, 0.15);
-}
-.dark .prose div.flex.gap-2.my-4.rounded-xl[style*="--callout-color:var(--color-fd-success"] {
-  background-color: rgba(16, 185, 129, 0.15);
+.dark .prose div.flex.gap-2.my-4.rounded-xl.bg-fd-card[style] {
+  background-color: color-mix(in srgb, var(--callout-color, transparent) 18%, var(--color-fd-card)) !important;
 }
 
 /* ── GFM Alert (remark-github-blockquote-alert) 스타일 ── */
