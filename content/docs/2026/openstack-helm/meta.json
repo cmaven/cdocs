@@ -1,0 +1,8 @@
+{
+  "title": "Openstack Helm",
+  "pages": [
+    "openstack-helm_quick_guide",
+    "openstack-helm_full_guide",
+    "openstack-helm_etc"
+  ]
+}

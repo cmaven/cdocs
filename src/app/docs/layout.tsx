@@ -11,24 +11,34 @@ import { GuideIcon } from '@/components/guide-icon';
 
 export default function Layout({ children }: { children: ReactNode }) {
   const allPages = source.getPages();
-  const urls2025 = new Set<string>();
-  const urls2026 = new Set<string>();
-  const urlsGuide = new Set<string>();
+  const categoryMap = new Map<string, Set<string>>();
 
   for (const page of allPages) {
-    if (page.url.startsWith('/docs/2025')) urls2025.add(page.url);
-    else if (page.url.startsWith('/docs/2026')) urls2026.add(page.url);
-    else if (page.url.startsWith('/docs/guide')) urlsGuide.add(page.url);
+    const match = page.url.match(/^\/docs\/([^/]+)/);
+    if (!match) continue;
+    const category = match[1];
+    if (!categoryMap.has(category)) categoryMap.set(category, new Set());
+    categoryMap.get(category)!.add(page.url);
+  }
+
+  // 카테고리 탭 생성 (guide는 마지막, 나머지는 이름순 정렬)
+  const tabs = [...categoryMap.entries()]
+    .filter(([name]) => name !== 'guide')
+    .sort(([a], [b]) => b.localeCompare(a))
+    .map(([name, urls]) => {
+      const firstUrl = [...urls].sort()[0];
+      return { title: name, url: firstUrl, urls };
+    });
+
+  // Guide 탭 마지막에 추가
+  if (categoryMap.has('guide')) {
+    tabs.push({ title: 'Guide', url: '/docs/guide', urls: categoryMap.get('guide')! });
   }
 
   return (
     <DocsLayout
       tree={source.pageTree}
-      tabs={[
-        { title: '2025', url: '/docs/2025/project-alpha', urls: urls2025 },
-        { title: '2026', url: '/docs/2026/project-gamma', urls: urls2026 },
-        { title: 'Guide', url: '/docs/guide', urls: urlsGuide },
-      ]}
+      tabs={tabs}
       sidebar={{ footer: (
         <div key="sidebar-footer" className="flex items-center gap-2">
           <GuideIcon />

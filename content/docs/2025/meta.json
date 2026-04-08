@@ -2,5 +2,10 @@
   "title": "2025",
   "root": true,
   "defaultOpen": true,
-  "pages": ["project-alpha", "project-alpha-v2", "project-beta"]
+  "pages": [
+    "project-alpha",
+    "project-alpha-v2",
+    "project-beta",
+    "project-delta"
+  ]
 }

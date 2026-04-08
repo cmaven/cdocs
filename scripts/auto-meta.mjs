@@ -28,7 +28,7 @@ async function getSubdirs(dir) {
 
 async function getMdxFiles(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
-  return entries.filter(e => e.isFile() && e.name.endsWith('.mdx')).map(e => e.name);
+  return entries.filter(e => e.isFile() && (e.name.endsWith('.mdx') || e.name.endsWith('.md'))).map(e => e.name);
 }
 
 async function ensureFrontmatter(filePath) {
@@ -38,9 +38,10 @@ async function ensureFrontmatter(filePath) {
     return;
   }
 
-  const name = basename(filePath, '.mdx');
+  const ext = filePath.endsWith('.mdx') ? '.mdx' : '.md';
+  const name = basename(filePath, ext);
   const title = name === 'index' ? toTitle(basename(join(filePath, '..'))) + ' 개요' : toTitle(name);
-  const frontmatter = `---\ntitle: ${title}\ndescription: \n---\n\n`;
+  const frontmatter = `---\ntitle: ${title}\ndescription: "${title}"\n---\n\n`;
   const newContent = frontmatter + content;
 
   console.log(`  + frontmatter: ${relative('.', filePath)}`);
@@ -61,18 +62,45 @@ async function processDir(dir, isRoot = false) {
     await ensureFrontmatter(join(dir, f));
   }
 
-  // meta.json 생성
+  // meta.json 생성 또는 업데이트
   if (mdxFiles.length > 0 || subdirs.length > 0) {
+    const mdxNames = mdxFiles.map(f => f.replace(/\.(mdx|md)$/, ''));
+    const allEntries = [...mdxNames.filter(n => n !== 'index'), ...subdirs.filter(d => d !== 'assets')];
+
     if (hasExistingMeta && !isForce) {
-      stats.metaSkipped++;
+      // 기존 meta.json에 누락된 파일/폴더 자동 추가
+      const existingMeta = JSON.parse(await readFile(metaPath, 'utf-8'));
+      const existingPages = new Set(existingMeta.pages || []);
+      let updated = false;
+
+      // index 파일이 있는데 pages에 없으면 맨 앞에 추가
+      if (mdxNames.includes('index') && !existingPages.has('index')) {
+        existingMeta.pages.unshift('index');
+        updated = true;
+      }
+
+      for (const entry of allEntries) {
+        if (!existingPages.has(entry)) {
+          existingMeta.pages.push(entry);
+          console.log(`  + meta.json 항목 추가: ${relative('.', metaPath)} → ${entry}`);
+          updated = true;
+        }
+      }
+
+      if (updated && !isDryRun) {
+        await writeFile(metaPath, JSON.stringify(existingMeta, null, 2) + '\n', 'utf-8');
+        stats.metaCreated++;
+      } else {
+        stats.metaSkipped++;
+      }
     } else {
       const pages = [];
-      const mdxNames = mdxFiles.map(f => f.replace('.mdx', ''));
       if (mdxNames.includes('index')) {
         pages.push('index');
       }
-      mdxNames.filter(n => n !== 'index').sort().forEach(n => pages.push(n));
-      subdirs.sort().forEach(d => pages.push(d));
+      allEntries.filter(n => n !== 'index').sort().forEach(n => {
+        if (!pages.includes(n)) pages.push(n);
+      });
 
       const dirName = basename(dir);
       const meta = { title: toTitle(dirName), pages };
@@ -101,7 +129,7 @@ async function updateRootMeta() {
   const rootMeta = JSON.parse(await readFile(rootMetaPath, 'utf-8'));
   const subdirs = await getSubdirs(CONTENT_DIR);
   const mdxFiles = await getMdxFiles(CONTENT_DIR);
-  const mdxNames = mdxFiles.map(f => f.replace('.mdx', ''));
+  const mdxNames = mdxFiles.map(f => f.replace(/\.(mdx|md)$/, ''));
 
   const allEntries = new Set([...rootMeta.pages]);
   for (const name of [...mdxNames, ...subdirs]) {
@@ -146,4 +174,29 @@ async function main() {
   console.log(`   frontmatter 추가: ${stats.frontmatterAdded}, 스킵: ${stats.frontmatterSkipped}\n`);
 }
 
-main().catch(e => { console.error('오류:', e.message); process.exit(1); });
+const isWatch = args.includes('--watch');
+
+async function watch() {
+  const { watch: fsWatch } = await import('fs');
+  let debounce = null;
+
+  console.log('👀 auto-meta: content/docs/ 감시 중 (파일 변경 시 자동 실행)\n');
+
+  fsWatch(CONTENT_DIR, { recursive: true }, (event, filename) => {
+    if (!filename) return;
+    // meta.json 변경은 무시 (무한 루프 방지)
+    if (filename.endsWith('meta.json')) return;
+    if (debounce) clearTimeout(debounce);
+    debounce = setTimeout(async () => {
+      stats.metaCreated = 0; stats.metaSkipped = 0;
+      stats.frontmatterAdded = 0; stats.frontmatterSkipped = 0;
+      try { await main(); } catch (e) { console.error('오류:', e.message); }
+    }, 1500);
+  });
+}
+
+if (isWatch) {
+  main().then(() => watch()).catch(e => { console.error('오류:', e.message); process.exit(1); });
+} else {
+  main().catch(e => { console.error('오류:', e.message); process.exit(1); });
+}

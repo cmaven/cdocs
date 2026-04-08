@@ -1,0 +1,10 @@
+{
+  "title": "2024",
+  "pages": [
+    "project-alpha",
+    "project-beta",
+    "project-gamma"
+  ],
+  "root": true,
+  "defaultOpen": true
+}
