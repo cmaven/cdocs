@@ -1,4 +1,4 @@
-/* style.css: VitePress 민트 테마 CSS (cmaven.github.io 참조) | 수정일: 2026-04-08 */
+/* style.css: VitePress 민트 테마 CSS (cmaven.github.io 참조) | 수정일: 2026-04-09 */
 
 /* ── 폰트 ── */
 @import url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2107@1.1/SUITE-Regular.woff2') format('woff2');
@@ -7,6 +7,10 @@
 :root {
   --vp-font-family-base: 'SUITE Variable', 'SUITE-Regular', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --vp-font-family-mono: 'D2Coding ligature', 'D2Coding', Monaco, Consolas, monospace;
+
+  /* ── 레이아웃: 사이드바 왼쪽 끝, TOC 오른쪽 끝, 콘텐츠 가변 ── */
+  --vp-sidebar-width: 240px;
+  --vp-layout-max-width: 100vw;
 }
 
 /* ── Light 모드: 민트 테마 ── */
@@ -70,6 +74,7 @@
 .vp-doc h2 {
   padding-bottom: 0.3em;
   border-bottom: 1px solid var(--vp-c-border);
+  border-top: none;
   margin-bottom: 0.8em;
 }
 
@@ -84,20 +89,19 @@
   display: table;
 }
 .vp-doc thead {
-  background: linear-gradient(135deg, var(--vp-c-brand-1), var(--vp-c-brand-2));
+  background: var(--vp-c-bg-soft);
 }
 :root .vp-doc thead th,
 .vp-doc table thead th {
   padding: 0.65em 1em;
   font-weight: 700;
   font-size: 0.875em;
-  color: #ffffff !important;
+  color: var(--vp-c-text-1);
   text-align: left;
-  border-bottom: none;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  border-bottom: 1px solid var(--vp-c-border);
 }
 .vp-doc thead th:not(:last-child) {
-  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  border-right: 1px solid var(--vp-c-border);
 }
 .vp-doc tbody tr {
   transition: background-color 0.15s;
@@ -120,10 +124,10 @@
 
 /* 다크모드 테이블 헤더 */
 .dark .vp-doc thead {
-  background: linear-gradient(135deg, #1a9e9e, #15b3b3);
+  background: var(--vp-c-bg-soft);
 }
 .dark .vp-doc thead th {
-  color: #ffffff;
+  color: var(--vp-c-text-1);
   font-weight: 700;
 }
 
@@ -254,4 +258,31 @@ body.hide-navbar .VPDoc { padding-top: 1.5rem !important; }
 .vp-doc pre {
   max-width: 100%;
   overflow-x: auto;
+}
+
+/* ── 콘텐츠 영역: 사이드바~TOC 사이 전체 채움 (scoped CSS 오버라이드) ── */
+.VPDoc.has-aside .content-container {
+  max-width: none !important;
+}
+.VPDoc .container {
+  justify-content: flex-start !important;
+}
+.VPDoc .content {
+  margin: 0 !important;
+  padding-right: 16px !important;
+  padding-left: 16px !important;
+  max-width: none !important;
+}
+
+/* ── Aside/TOC 너비 오버라이드 (VitePress scoped CSS 대체) ── */
+.VPDoc .aside {
+  max-width: 220px !important;
+}
+.VPDoc .aside-container {
+  width: 220px !important;
+}
+
+/* ── 사이드바 내부: 푸터 고정 영역 확보 ── */
+.VPSidebar .nav {
+  padding-bottom: 5.5rem;
 }

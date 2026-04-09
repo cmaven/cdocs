@@ -1,4 +1,4 @@
-<!-- SidebarFooter.vue: 사이드바 하단 - 검색 + 아이콘(토글/GitHub/Guide) | 수정일: 2026-04-08 -->
+<!-- SidebarFooter.vue: 사이드바 하단 - 검색 + 아이콘(토글/GitHub/Guide) | 수정일: 2026-04-09 -->
 <script setup>
 import { useData } from 'vitepress'
 
@@ -64,8 +64,15 @@ function openSearch() {
   flex-direction: column;
   gap: 0.5rem;
   padding: 0.75rem;
-  margin-top: auto;
   border-top: 1px solid var(--vp-c-border);
+  /* 브라우저 하단 고정 (사이드바 내용량 무관) */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: var(--vp-sidebar-width, 240px);
+  background: var(--vp-c-bg-alt);
+  z-index: 2;
+  box-sizing: border-box;
 }
 
 /* Row 1: Search */
