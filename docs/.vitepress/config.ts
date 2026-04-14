@@ -321,35 +321,7 @@ export default defineConfig({
       host: '0.0.0.0',
       port: 3030,
     },
-    build: {
-      rollupOptions: {
-        onwarn(warning, warn) {
-          // 누락된 이미지/asset import 경고 무시
-          if (warning.code === 'UNRESOLVED_IMPORT') return
-          warn(warning)
-        },
-        onLog(level, log, handler) {
-          if (log.code === 'UNRESOLVED_IMPORT') return
-          handler(level, log)
-        },
-      },
-    },
     plugins: [{
-      name: 'ignore-missing-assets',
-      resolveId(source) {
-        // 존재하지 않는 이미지 참조를 빈 모듈로 대체
-        if (/\.(png|jpe?g|gif|svg|webp|ico|bmp|tiff?)(\?.*)?$/.test(source)) {
-          return { id: '\0empty-asset', external: false }
-        }
-        return null
-      },
-      load(id) {
-        if (id === '\0empty-asset') {
-          return 'export default ""'
-        }
-        return null
-      },
-    }, {
       name: 'auto-restart-on-new-docs',
       configureServer(server) {
         const watcher = server.watcher
